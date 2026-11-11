@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naruto Universe — Shinobi Legacy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #06060c;
+  --bg-secondary: #0c0c18;
+  --bg-card: #111125;
+  --bg-card-hover: #16163a;
+  --orange-primary: #ff6a00;
+  --orange-glow: #ff8c33;
+  --red-accent: #e63946;
+  --blue-chakra: #4361ee;
+  --blue-rasengan: #00b4d8;
+  --purple-sage: #7b2ff7;
+  --text-primary: #f0f0f5;
+  --text-secondary: #8888aa;
+  --text-muted: #555577;
+  --border-subtle: rgba(255, 106, 0, 0.12);
+  --border-glow: rgba(255, 106, 0, 0.4);
+  --shadow-orange: 0 0 60px rgba(255, 106, 0, 0.15);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --transition-fast: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+button { border: none; cursor: pointer; font-family: inherit; }
+
+/* ═══════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--orange-primary), var(--red-accent));
+  border-radius: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 0 clamp(16px, 4vw, 48px);
+  height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(6, 6, 12, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: var(--transition-smooth);
+}
+.nav.scrolled {
+  background: rgba(6, 6, 12, 0.92);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'Orbitron', monospace;
+  font-weight: 800; font-size: 1.3rem;
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.nav-logo .logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--orange-primary), var(--red-accent));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+  position: relative;
+}
+.nav-logo .logo-icon::after {
+  content: '';
+  position: absolute; inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 106, 0, 0.3);
+  animation: pulse-ring 2s infinite;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+.nav-logo span { background: linear-gradient(135deg, var(--orange-primary), var(--orange-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-links a {
+  padding: 8px 18px;
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+  letter-spacing: 0.5px;
+  position: relative;
+}
+.nav-links a:hover { color: var(--text-primary); background: rgba(255, 106, 0, 0.08); }
+.nav-links a.active { color: var(--orange-primary); }
+
+.nav-cta {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--orange-primary), var(--red-accent));
+  color: #fff; font-weight: 600; font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+  transition: var(--transition-fast);
+  box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3);
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255, 106, 0, 0.5); }
+
+/* Mobile hamburger */
+.nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; padding: 8px; }
+.nav-toggle span { width: 24px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: var(--transition-fast); }
+
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+    flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    background: rgba(6, 6, 12, 0.97);
+    backdrop-filter: blur(30px);
+    transform: translateX(100%); transition: var(--transition-smooth);
+  }
+  .nav-links.open { transform: translateX(0); }
+  .nav-links a { font-size: 1.1rem; padding: 14px 28px; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  padding: 100px 24px 60px;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 106, 0, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(67, 97, 238, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 60% at 10% 60%, rgba(230, 57, 70, 0.05) 0%, transparent 50%);
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 106, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 106, 0, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 60% at center, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 20%, transparent 70%);
+}
+
+#particles-canvas {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  max-width: 900px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px;
+  background: rgba(255, 106, 0, 0.1);
+  border: 1px solid rgba(255, 106, 0, 0.25);
+  border-radius: 100px;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--orange-glow);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s ease-out;
+}
+.hero-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--orange-primary);
+  box-shadow: 0 0 10px var(--orange-primary);
+  animation: blink 1.5s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.hero-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.8s ease-out 0.1s both;
+}
+.hero-title .line1 { display: block; color: var(--text-primary); }
+.hero-title .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--orange-primary) 0%, var(--red-accent) 50%, var(--purple-sage) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--text-secondary);
+  max-width: 640px; margin: 0 auto 40px;
+  line-height: 1.7;
+  animation: fadeUp 0.8s ease-out 0.2s both;
+}
+
+.hero-actions {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s ease-out 0.3s both;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px;
+  background: linear-gradient(135deg, var(--orange-primary), var(--red-accent));
+  color: #fff; font-weight: 700; font-size: 1rem;
+  border-radius: var(--radius-md);
+  letter-spacing: 0.5px;
+  transition: var(--transition-fast);
+  box-shadow: 0 4px 20px rgba(255, 106, 0, 0.35);
+  position: relative; overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: 0.6s;
+}
+.btn-primary:hover::before { transform: translateX(100%); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 35px rgba(255, 106, 0, 0.5); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px;
+  background: transparent;
+  border: 1.5px solid rgba(255, 106, 0, 0.35);
+  color: var(--text-primary); font-weight: 600; font-size: 1rem;
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+}
+.btn-secondary:hover {
+  border-color: var(--orange-primary);
+  background: rgba(255, 106, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.hero-stats {
+  display: flex; align-items: center; justify-content: center; gap: 48px;
+  margin-top: 64px;
+  animation: fadeUp 0.8s ease-out 0.5s both;
+}
+.hero-stat { text-align: center; }
+.hero-stat .num {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--orange-primary), var(--orange-glow));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-stat .label {
+  font-size: 0.8rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500;
+  margin-top: 4px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION STYLING
+   ═══════════════════════════════════════════════════════ */
+.section {
+  padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 80px);
+  position: relative;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: clamp(40px, 6vw, 72px);
+}
+.section-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange-primary);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  max-width: 700px; margin: 0 auto;
+}
+.section-desc {
+  font-size: 1.05rem; color: var(--text-secondary);
+  max-width: 580px; margin: 16px auto 0; line-height: 1.7;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CHARACTERS SECTION
+   ═══════════════════════════════════════════════════════ */
+.characters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px; margin: 0 auto;
+}
+
+.character-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  position: relative;
+  cursor: pointer;
+}
+.character-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-orange);
+}
+.character-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 200px;
+  background: var(--card-gradient);
+  opacity: 0.15;
+  transition: var(--transition-smooth);
+}
+.character-card:hover::before { opacity: 0.25; }
+
+.character-visual {
+  height: 220px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.character-symbol {
+  font-size: 5rem;
+  filter: drop-shadow(0 0 30px var(--card-color));
+  transition: var(--transition-bounce);
+  z-index: 1;
+}
+.character-card:hover .character-symbol { transform: scale(1.15) rotate(-5deg); }
+
+.character-ring {
+  position: absolute;
+  width: 120px; height: 120px;
+  border: 2px solid var(--card-color);
+  border-radius: 50%;
+  opacity: 0.2;
+  animation: spin 20s linear infinite;
+}
+.character-ring:nth-child(2) { width: 160px; height: 160px; animation-duration: 30s; animation-direction: reverse; opacity: 0.1; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.character-info { padding: 24px; position: relative; z-index: 1; }
+.character-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem; font-weight: 700;
+  margin-bottom: 4px;
+}
+.character-title {
+  font-size: 0.82rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.character-desc {
+  font-size: 0.9rem; color: var(--text-secondary);
+  line-height: 1.6; margin-bottom: 18px;
+}
+
+.character-stats-bar {
+  display: flex; gap: 12px;
+}
+.stat-pill {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 100px;
+  font-size: 0.75rem; color: var(--text-secondary);
+}
+.stat-pill .stat-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--card-color);
+}
+
+/* ═══════════════════════════════════════════════════════
+   VILLAGES / CLANS SECTION
+   ═══════════════════════════════════════════════════════ */
+.villages-section { background: var(--bg-secondary); }
+
+.villages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.village-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 32px 24px;
+  text-align: center;
+  transition: var(--transition-smooth);
+  position: relative; overflow: hidden;
+}
+.village-card::before {
+  content: '';
+  position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: var(--village-color);
+  opacity: 0.06;
+  filter: blur(30px);
+  transition: var(--transition-smooth);
+}
+.village-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--village-color);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+.village-card:hover::before { opacity: 0.15; width: 200px; height: 200px; }
+
+.village-icon {
+  font-size: 2.8rem;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 15px var(--village-color));
+}
+.village-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.25rem; font-weight: 700;
+  margin-bottom: 4px;
+}
+.village-jp {
+  font-size: 0.78rem; color: var(--text-muted);
+  letter-spacing: 1px; margin-bottom: 10px;
+}
+.village-kage {
+  display: inline-block;
+  padding: 4px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  font-size: 0.75rem; color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   JUTSU SHOWCASE
+   ═══════════════════════════════════════════════════════ */
+.jutsu-list {
+  max-width: 900px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+.jutsu-item {
+  display: flex; align-items: center; gap: 20px;
+  padding: 24px 28px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+}
+.jutsu-item:hover {
+  border-color: var(--border-glow);
+  transform: translateX(8px);
+  box-shadow: -4px 0 25px rgba(255, 106, 0, 0.1);
+}
+
+.jutsu-rank {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  font-family: 'Orbitron', monospace;
+  font-weight: 800; font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.rank-s { background: linear-gradient(135deg, #ff6a00, #e63946); color: #fff; }
+.rank-a { background: linear-gradient(135deg, #7b2ff7, #4361ee); color: #fff; }
+.rank-b { background: linear-gradient(135deg, #00b4d8, #0077b6); color: #fff; }
+
+.jutsu-info { flex: 1; }
+.jutsu-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.2rem; font-weight: 700;
+  margin-bottom: 4px;
+}
+.jutsu-type {
+  font-size: 0.82rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.jutsu-user {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TIMELINE / STORY ARCS
+   ═══════════════════════════════════════════════════════ */
+.timeline-section { background: var(--bg-secondary); }
+.timeline {
+  max-width: 800px; margin: 0 auto;
+  position: relative;
+  padding-left: 40px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 14px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--orange-primary), var(--blue-chakra), var(--purple-sage));
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 48px 32px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -33px; top: 6px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--arc-color);
+  box-shadow: 0 0 15px var(--arc-color);
+  border: 3px solid var(--bg-secondary);
+}
+.timeline-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem; font-weight: 600;
+  color: var(--arc-color);
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.timeline-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.4rem; font-weight: 700;
+  margin-bottom: 8px;
+}
+.timeline-desc {
+  font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;
+}
+.timeline-episodes {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  font-size: 0.75rem; color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════
+   POWER LEVELS
+   ═══════════════════════════════════════════════════════ */
+.power-grid {
+  max-width: 800px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.power-row {
+  display: flex; align-items: center; gap: 16px;
+}
+.power-name {
+  width: 140px; flex-shrink: 0;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600; font-size: 1rem;
+  text-align: right;
+}
+.power-bar-bg {
+  flex: 1; height: 28px;
+  background: var(--bg-card);
+  border-radius: 100px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  position: relative;
+}
+.power-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: var(--bar-gradient);
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+.power-bar-fill::after {
+  content: '';
+  position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2));
+  border-radius: 0 100px 100px 0;
+}
+.power-val {
+  width: 50px; flex-shrink: 0;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700; font-size: 0.9rem;
+  color: var(--orange-primary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   CTA / NEWSLETTER
+   ═══════════════════════════════════════════════════════ */
+.cta-section {
+  background: var(--bg-secondary);
+  position: relative; overflow: hidden;
+}
+.cta-box {
+  max-width: 700px; margin: 0 auto;
+  text-align: center;
+  padding: 60px 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  position: relative; overflow: hidden;
+}
+.cta-box::before {
+  content: '';
+  position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(from 0deg, transparent 0%, rgba(255, 106, 0, 0.05) 25%, transparent 50%);
+  animation: spin 10s linear infinite;
+}
+.cta-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  margin-bottom: 12px;
+  position: relative;
+}
+.cta-desc {
+  font-size: 1rem; color: var(--text-secondary);
+  margin-bottom: 28px;
+  position: relative;
+}
+.cta-form {
+  display: flex; gap: 12px;
+  max-width: 460px; margin: 0 auto;
+  position: relative;
+}
+.cta-input {
+  flex: 1;
+  padding: 14px 20px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition-fast);
+}
+.cta-input:focus { border-color: var(--orange-primary); box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.1); }
+.cta-input::placeholder { color: var(--text-muted); }
+
+@media (max-width: 480px) {
+  .cta-form { flex-direction: column; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════ */
+.footer {
+  padding: 48px clamp(16px, 5vw, 80px) 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px;
+}
+.footer-brand {
+  font-family: 'Orbitron', monospace;
+  font-weight: 700; font-size: 1rem;
+  color: var(--orange-primary);
+  letter-spacing: 2px;
+}
+.footer-copy {
+  font-size: 0.82rem; color: var(--text-muted);
+}
+.footer-social {
+  display: flex; gap: 16px;
+}
+.footer-social a {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  transition: var(--transition-fast);
+}
+.footer-social a:hover {
+  border-color: var(--orange-primary);
+  color: var(--orange-primary);
+  background: rgba(255, 106, 0, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════════════════
+   KONOHA LEAF DIVIDER
+   ═══════════════════════════════════════════════════════ */
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  padding: 16px 0;
+}
+.divider-line {
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange-primary), transparent);
+}
+.divider-icon { font-size: 1.2rem; opacity: 0.6; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVIGATION ═══════════ -->
+<nav class="nav" id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">🍥</div>
+    <span>NARUTO</span>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#characters" class="active">Characters</a>
+    <a href="#villages">Villages</a>
+    <a href="#jutsu">Jutsu</a>
+    <a href="#story">Story</a>
+    <a href="#power">Power</a>
+    <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Join Shinobi</button>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <canvas id="particles-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> Shinobi Universe Explorer</div>
+    <h1 class="hero-title">
+      <span class="line1">The Legend of</span>
+      <span class="line2">Naruto Uzumaki</span>
+    </h1>
+    <p class="hero-subtitle">Explore the complete shinobi universe — from the Hidden Leaf Village to the Great Ninja War. Discover characters, jutsu, clans, and the epic story that defined a generation.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('characters').scrollIntoView({behavior:'smooth'})">
+        ⚡ Explore Characters
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('story').scrollIntoView({behavior:'smooth'})">
+        📜 Story Arcs
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num" data-target="720">0</div>
+        <div class="label">Episodes</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" data-target="1400">0</div>
+        <div class="label">Characters</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" data-target="500">0</div>
+        <div class="label">Jutsu</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" data-target="72">0</div>
+        <div class="label">Volumes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CHARACTERS ═══════════ -->
+<section class="section" id="characters">
+  <div class="section-header reveal">
+    <div class="section-label">Legendary Shinobi</div>
+    <h2 class="section-title">Meet the Heroes & Legends</h2>
+    <p class="section-desc">The greatest ninja who shaped the course of shinobi history across all five nations.</p>
+  </div>
+  <div class="characters-grid">
+
+    <div class="character-card reveal" style="--card-gradient: linear-gradient(135deg, #ff6a00, #ff8c33); --card-color: #ff6a00;">
+      <div class="character-visual">
+        <div class="character-ring" style="border-color: #ff6a00;"></div>
+        <div class="character-ring" style="border-color: #ff6a00;"></div>
+        <div class="character-symbol">🦊</div>
+      </div>
+      <div class="character-info">
+        <div class="character-name">Naruto Uzumaki</div>
+        <div class="character-title">Seventh Hokage</div>
+        <div class="character-desc">Jinchuriki of the Nine-Tails and the child of prophecy who united the shinobi world through sheer determination and unwavering bonds.</div>
+        <div class="character-stats-bar">
+          <div class="stat-pill"><span class="stat-dot" style="background:#ff6a00"></span> Sage Mode</div>
+          <div class="stat-pill"><span class="stat-dot" style="background:#ff6a00"></span> Kurama</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="character-card reveal" style="--card-gradient: linear-gradient(135deg, #7b2ff7, #4361ee); --card-color: #7b2ff7;">
+      <div class="character-visual">
+        <div class="character-ring" style="border-color: #7b2ff7;"></div>
+        <div class="character-ring" style="border-color: #7b2ff7;"></div>
+        <div class="character-symbol">👁️</div>
+      </div>
+      <div class="character-info">
+        <div class="character-name">Sasuke Uchiha</div>
+        <div class="character-title">Shadow Hokage</div>
+        <div class="character-desc">The last surviving Uchiha, wielder of the Eternal Mangekyo Sharingan and Rinnegan. Walking the path of atonement to protect the world from the shadows.</div>
+        <div class="character-stats-bar">
+          <div class="stat-pill"><span class="stat-dot" style="background:#7b2ff7"></span> Rinnegan</div>
+          <div class="stat-pill"><span class="stat-dot" style="background:#7b2ff7"></span> Susanoo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="character-card reveal" style="--card-gradient: linear-gradient(135deg, #e63946, #ff6b6b); --card-color: #e63946;">
+      <div class="character-visual">
+        <div class="character-ring" style="border-color: #e63946;"></div>
+        <div class="character-ring" style="border-color: #e63946;"></div>
+        <div class="character-symbol">🌸</div>
+      </div>
+      <div class="character-info">
+        <div class="character-name">Sakura Haruno</div>
+        <div class="character-title">Greatest Medical Ninja</div>
+        <div class="character-desc">Student of the legendary Tsunade, her monstrous strength and medical ninjutsu saved countless lives on the battlefield.</div>
+        <div class="character-stats-bar">
+          <div class="stat-pill"><span class="stat-dot" style="background:#e63946"></span> Byakugou</div>
+          <div class="stat-pill"><span class="stat-dot" style="background:#e63946"></span> CES</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="character-card reveal" style="--card-gradient: linear-gradient(135deg, #888888, #aaaaaa); --card-color: #999;">
+      <div class="character-visual">
+        <div class="character-ring" style="border-color: #999;"></div>
+        <div class="character-ring" style="border-color: #999;"></div>
+        <div class="character-symbol">📖</div>
+      </div>
+      <div class="character-info">
+        <div class="character-name">Kakashi Hatake</div>
+        <div class="character-title">Sixth Hokage • Copy Ninja</div>
+        <div class="character-desc">The genius prodigy who copied over 1000 jutsu. Former ANBU captain and sensei of Team 7 who shaped the next generation.</div>
+        <div class="character-stats-bar">
+          <div class="stat-pill"><span class="stat-dot" style="background:#999"></span> Chidori</div>
+          <div class="stat-pill"><span class="stat-dot" style="background:#999"></span> Kamui</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="character-card reveal" style="--card-gradient: linear-gradient(135deg, #00b4d8, #0077b6); --card-color: #00b4d8;">
+      <div class="character-visual">
+        <div class="character-ring" style="border-color: #00b4d8;"></div>
+        <div class="character-ring" style="border-color: #00b4d8;"></div>
+        <div class="character-symbol">💧</div>
+      </div>
+      <div class="character-info">
+        <div class="character-name">Hinata Hyuga</div>
+        <div class="character-title">Byakugan Princess</div>
+        <div class="character-desc">The gentle yet fierce princess of the Hyuga clan, whose Twin Lion Fists and unwavering love became a beacon of hope.</div>
+        <div class="character-stats-bar">
+          <div class="stat-pill"><span class="stat-dot" style="background:#00b4d8"></span> Byakugan</div>
+          <div class="stat-pill"><span class="stat-dot" style="background:#00b4d8"></span> Gentle Fist</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="character-card reveal" style="--card-gradient: linear-gradient(135deg, #2ec4b6, #20a39e); --card-color: #2ec4b6;">
+      <div class="character-visual">
+        <div class="character-ring" style="border-color: #2ec4b6;"></div>
+        <div class="character-ring" style="border-color: #2ec4b6;"></div>
+        <div class="character-symbol">🥋</div>
+      </div>
+      <div class="character-info">
+        <div class="character-name">Rock Lee</div>
+        <div class="character-title">The Beautiful Green Beast</div>
+        <div class="character-desc">Born without the ability to use ninjutsu or genjutsu, he proved through taijutsu alone that hard work can surpass natural genius.</div>
+        <div class="character-stats-bar">
+          <div class="stat-pill"><span class="stat-dot" style="background:#2ec4b6"></span> 8 Gates</div>
+          <div class="stat-pill"><span class="stat-dot" style="background:#2ec4b6"></span> Taijutsu</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ VILLAGES ═══════════ -->
+<section class="section villages-section" id="villages">
+  <div class="section-header reveal">
+    <div class="section-label">Five Great Nations</div>
+    <h2 class="section-title">Hidden Villages</h2>
+    <p class="section-desc">The five great shinobi villages and their legendary leaders who maintain balance in the ninja world.</p>
+  </div>
+  <div class="villages-grid">
+
+    <div class="village-card reveal" style="--village-color: #2ec4b6;">
+      <div class="village-icon">🍃</div>
+      <div class="village-name">Hidden Leaf</div>
+      <div class="village-jp">Konohagakure</div>
+      <div class="village-kage">🔥 Hokage</div>
+    </div>
+
+    <div class="village-card reveal" style="--village-color: #f4a261;">
+      <div class="village-icon">🏜️</div>
+      <div class="village-name">Hidden Sand</div>
+      <div class="village-jp">Sunagakure</div>
+      <div class="village-kage">💨 Kazekage</div>
+    </div>
+
+    <div class="village-card reveal" style="--village-color: #00b4d8;">
+      <div class="village-icon">🌊</div>
+      <div class="village-name">Hidden Mist</div>
+      <div class="village-jp">Kirigakure</div>
+      <div class="village-kage">💧 Mizukage</div>
+    </div>
+
+    <div class="village-card reveal" style="--village-color: #e63946;">
+      <div class="village-icon">🌋</div>
+      <div class="village-name">Hidden Stone</div>
+      <div class="village-jp">Iwagakure</div>
+      <div class="village-kage">🪨 Tsuchikage</div>
+    </div>
+
+    <div class="village-card reveal" style="--village-color: #f7d794;">
+      <div class="village-icon">⚡</div>
+      <div class="village-name">Hidden Cloud</div>
+      <div class="village-jp">Kumogakure</div>
+      <div class="village-kage">⚡ Raikage</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ JUTSU ═══════════ -->
+<section class="section" id="jutsu">
+  <div class="section-header reveal">
+    <div class="section-label">Technique Archive</div>
+    <h2 class="section-title">Legendary Jutsu</h2>
+    <p class="section-desc">The most powerful techniques ever recorded in the shinobi arts — from forbidden seals to world-shaking ninjutsu.</p>
+  </div>
+  <div class="jutsu-list">
+
+    <div class="jutsu-item reveal">
+      <div class="jutsu-rank rank-s">S</div>
+      <div class="jutsu-info">
+        <div class="jutsu-name">Rasengan</div>
+        <div class="jutsu-type">Ninjutsu • Shape Transformation</div>
+      </div>
+      <div class="jutsu-user">🦊 Naruto</div>
+    </div>
+
+    <div class="jutsu-item reveal">
+      <div class="jutsu-rank rank-s">S</div>
+      <div class="jutsu-info">
+        <div class="jutsu-name">Chidori / Raikiri</div>
+        <div class="jutsu-type">Ninjutsu • Lightning Release</div>
+      </div>
+      <div class="jutsu-user">👁️ Kakashi / Sasuke</div>
+    </div>
+
+    <div class="jutsu-item reveal">
+      <div class="jutsu-rank rank-s">S</div>
+      <div class="jutsu-info">
+        <div class="jutsu-name">Susanoo</div>
+        <div class="jutsu-type">Kekkei Genkai • Mangekyo</div>
+      </div>
+      <div class="jutsu-user">👁️ Uchiha Clan</div>
+    </div>
+
+    <div class="jutsu-item reveal">
+      <div class="jutsu-rank rank-s">S</div>
+      <div class="jutsu-info">
+        <div class="jutsu-name">Infinite Tsukuyomi</div>
+        <div class="jutsu-type">Genjutsu • Rinnegan</div>
+      </div>
+      <div class="jutsu-user">🌙 Madara / Kaguya</div>
+    </div>
+
+    <div class="jutsu-item reveal">
+      <div class="jutsu-rank rank-a">A</div>
+      <div class="jutsu-info">
+        <div class="jutsu-name">Shadow Clone Jutsu</div>
+        <div class="jutsu-type">Ninjutsu • Clone Technique</div>
+      </div>
+      <div class="jutsu-user">🦊 Naruto</div>
+    </div>
+
+    <div class="jutsu-item reveal">
+      <div class="jutsu-rank rank-a">A</div>
+      <div class="jutsu-info">
+        <div class="jutsu-name">Eight Inner Gates</div>
+        <div class="jutsu-type">Taijutsu • Kinjutsu</div>
+      </div>
+      <div class="jutsu-user">🥋 Guy / Lee</div>
+    </div>
+
+    <div class="jutsu-item reveal">
+      <div class="jutsu-rank rank-b">B</div>
+      <div class="jutsu-info">
+        <div class="jutsu-name">Gentle Fist: 64 Palms</div>
+        <div class="jutsu-type">Taijutsu • Byakugan</div>
+      </div>
+      <div class="jutsu-user">💧 Hinata / Neji</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ STORY ARCS ═══════════ -->
+<section class="section timeline-section" id="story">
+  <div class="section-header reveal">
+    <div class="section-label">Epic Saga</div>
+    <h2 class="section-title">Story Arcs Timeline</h2>
+    <p class="section-desc">From a lonely orphan to the greatest Hokage — the complete journey of Naruto Uzumaki.</p>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item reveal" style="--arc-color: #2ec4b6;">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Part I — Beginning</div>
+      <div class="timeline-title">Land of Waves Arc</div>
+      <div class="timeline-desc">Team 7's first real mission outside the village. The encounter with Zabuza Momochi and Haku that forged their bonds and revealed what it truly means to be a ninja.</div>
+      <div class="timeline-episodes">Episodes 1–19</div>
+    </div>
+
+    <div class="timeline-item reveal" style="--arc-color: #4361ee;">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Part I — Turning Point</div>
+      <div class="timeline-title">Chunin Exams Arc</div>
+      <div class="timeline-desc">The tournament that introduced legendary rivals — Gaara, Rock Lee, Neji, and Orochimaru's dark invasion of the Leaf. Where Naruto first proved his ninja way.</div>
+      <div class="timeline-episodes">Episodes 20–67</div>
+    </div>
+
+    <div class="timeline-item reveal" style="--arc-color: #e63946;">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Part I — Heartbreak</div>
+      <div class="timeline-title">Sasuke Recovery Arc</div>
+      <div class="timeline-desc">Sasuke's defection to Orochimaru. The desperate pursuit by Naruto and friends. The iconic battle at the Valley of the End that tore Team 7 apart.</div>
+      <div class="timeline-episodes">Episodes 107–135</div>
+    </div>
+
+    <div class="timeline-item reveal" style="--arc-color: #ff6a00;">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Shippuden — Rising</div>
+      <div class="timeline-title">Pain's Assault Arc</div>
+      <div class="timeline-desc">The destruction of the Hidden Leaf by Pain and Naruto's triumphant return as the hero. The moment he earned the village's recognition and understood true peace.</div>
+      <div class="timeline-episodes">Episodes 152–175</div>
+    </div>
+
+    <div class="timeline-item reveal" style="--arc-color: #7b2ff7;">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Shippuden — Finale</div>
+      <div class="timeline-title">Fourth Great Ninja War</div>
+      <div class="timeline-desc">The ultimate battle uniting all five nations against Madara, Obito, and Kaguya. Naruto and Sasuke's final clash that decided the fate of the entire shinobi world.</div>
+      <div class="timeline-episodes">Episodes 261–479</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ POWER LEVELS ═══════════ -->
+<section class="section" id="power">
+  <div class="section-header reveal">
+    <div class="section-label">Battle Analytics</div>
+    <h2 class="section-title">Power Rankings</h2>
+    <p class="section-desc">Comparative power levels of the most legendary shinobi at their peak strength.</p>
+  </div>
+  <div class="power-grid">
+    <div class="power-row reveal">
+      <div class="power-name">Naruto (Baryon)</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="100" style="--bar-gradient: linear-gradient(90deg, #ff6a00, #ff8c33);"></div>
+      </div>
+      <div class="power-val">100</div>
+    </div>
+    <div class="power-row reveal">
+      <div class="power-name">Sasuke (Rinnegan)</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="97" style="--bar-gradient: linear-gradient(90deg, #7b2ff7, #4361ee);"></div>
+      </div>
+      <div class="power-val">97</div>
+    </div>
+    <div class="power-row reveal">
+      <div class="power-name">Madara (Juubi)</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="96" style="--bar-gradient: linear-gradient(90deg, #e63946, #ff6b6b);"></div>
+      </div>
+      <div class="power-val">96</div>
+    </div>
+    <div class="power-row reveal">
+      <div class="power-name">Hashirama</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="90" style="--bar-gradient: linear-gradient(90deg, #2ec4b6, #20a39e);"></div>
+      </div>
+      <div class="power-val">90</div>
+    </div>
+    <div class="power-row reveal">
+      <div class="power-name">Minato</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="88" style="--bar-gradient: linear-gradient(90deg, #f4a261, #e76f51);"></div>
+      </div>
+      <div class="power-val">88</div>
+    </div>
+    <div class="power-row reveal">
+      <div class="power-name">Itachi</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="85" style="--bar-gradient: linear-gradient(90deg, #e63946, #7b2ff7);"></div>
+      </div>
+      <div class="power-val">85</div>
+    </div>
+    <div class="power-row reveal">
+      <div class="power-name">Guy (8th Gate)</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="95" style="--bar-gradient: linear-gradient(90deg, #2ec4b6, #ff6a00);"></div>
+      </div>
+      <div class="power-val">95</div>
+    </div>
+    <div class="power-row reveal">
+      <div class="power-name">Kakashi (DMS)</div>
+      <div class="power-bar-bg">
+        <div class="power-bar-fill" data-width="92" style="--bar-gradient: linear-gradient(90deg, #888, #aaa);"></div>
+      </div>
+      <div class="power-val">92</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section class="section cta-section" id="cta">
+  <div class="cta-box reveal">
+    <div class="cta-title">Join the Shinobi Academy</div>
+    <div class="cta-desc">Subscribe to receive the latest intel on missions, jutsu discoveries, and shinobi lore delivered straight to your scroll.</div>
+    <form class="cta-form" onsubmit="event.preventDefault(); this.querySelector('input').value='Dattebayo! You\'re in! 🍥'; this.querySelector('button').textContent='✓ Joined';">
+      <input class="cta-input" type="email" placeholder="your-email@konoha.ninja" required>
+      <button class="btn-primary" type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">NARUTO UNIVERSE</div>
+    <div class="footer-copy">&copy; 2026 Shinobi Legacy. Fan-made tribute site. All rights reserved to Masashi Kishimoto.</div>
+    <div class="footer-social">
+      <a href="#" aria-label="Twitter">𝕏</a>
+      <a href="#" aria-label="Instagram">📷</a>
+      <a href="#" aria-label="Discord">💬</a>
+      <a href="#" aria-label="Reddit">🔴</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+/* ─── Particle System ─── */
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const PARTICLE_COUNT = 50;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.radius = Math.random() * 2 + 0.5;
+      this.opacity = Math.random() * 0.4 + 0.1;
+      this.hue = Math.random() > 0.5 ? 25 : 220;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${this.hue}, 90%, 60%, ${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(255, 106, 0, ${0.06 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ─── Navbar scroll effect ─── */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/* ─── Mobile menu toggle ─── */
+document.getElementById('navToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+/* ─── Scroll reveal ─── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ─── Counter animation ─── */
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
+      let current = 0;
+      const increment = target / 60;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = Math.floor(current).toLocaleString() + (target >= 100 ? '+' : '');
+      }, 25);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.hero-stat .num').forEach(el => counterObserver.observe(el));
+
+/* ─── Power bar animation ─── */
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const bar = entry.target.querySelector('.power-bar-fill');
+      if (bar) {
+        setTimeout(() => {
+          bar.style.width = bar.dataset.width + '%';
+        }, 200);
+      }
+      barObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.power-row').forEach(el => barObserver.observe(el));
+
+/* ─── Active nav link on scroll ─── */
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 100;
+    if (window.scrollY >= top) current = section.getAttribute('id');
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
